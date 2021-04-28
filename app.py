@@ -13,8 +13,8 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 
 engine = create_engine(
-    'postgres://hbohcwbaukrfpj:7e99e59537a38c868085aec082c903eecf2f63b3aa426162615012dc98c93ceb@ec2-54-152-175-141.'
-    'compute-1.amazonaws.com:5432/d34ung0btlp93t')
+    'postgres://chbdssotnupsvh:e847ea8f4b564dafd973e087d1d1317fa9d7d0e2c3ff6e5e11339291c4f67636@ec2-107-22-83-3.'
+    'compute-1.amazonaws.com:5432/d2u8sdenc9esn2')
 db = scoped_session(sessionmaker(bind=engine))
 
 
@@ -123,11 +123,9 @@ def book(isbn):
     if book is None:
         return render_template('error.html', message='This book is not available', navbar=True)
     
-   # br = db.execute('SELECT * FROM reviews WHERE isbn=:isbn',{'isbn': isbn, 'review': review, 'username': username}).fetchall()
-    #isbn=br.isbn
-    #review=br.review
-    #username=br.username
-    return render_template('book.html', book=book, navbar=True)
+    br = db.execute('SELECT * FROM reviews WHERE isbn=:isbn',{'isbn': isbn}).fetchall()
+    
+    return render_template('book.html', br=br, book=book, navbar=True)
     
 
     #url = "https://www.goodreads.com/book/isbn/ISBN/{}?key=uRIzbUSdv97Awwv544YQ".format(isbn)
@@ -140,21 +138,16 @@ def book(isbn):
         review_count = tree[1][17][3].text
         avg_score = tree[1][18].text
         link = tree[1][24].text
-
     except IndexError:
         return render_template('book.html', book=book, link=None, navbar=True)
-
     description_markup = Markup(description)
-
     return render_template('book.html', book=book, link=link, description=description_markup,
                            image_url=image_url, review_count=review_count, avg_score=avg_score, navbar=True)
 '''
-@app.route('/books/0553803700')
-def booki():
+
+
     
-    return render_template('isaac.html', message='reviews', navbar=True)
-    
-'''
+
 @app.route('/api/<isbn>')
 def book_api(isbn):
 
@@ -164,18 +157,16 @@ def book_api(isbn):
     if book is None:
         api = jsonify({'error': 'This book is not available'})
         return api
-
+'''
     url = "https://www.goodreads.com/book/isbn/{}?key=uRIzbUSdv97Awwv544YQ".format(isbn)
     res = requests.get(url)
     tree = ElementTree.fromstring(res.content)
-
     try:
         description = tree[1][16].text
         image_url = tree[1][8].text
         review_count = tree[1][17][3].text
         avg_score = tree[1][18].text
         link = tree[1][24].text
-
     except IndexError:
         api = jsonify({
             'title': book.title,
@@ -188,9 +179,7 @@ def book_api(isbn):
             'review_count': '',
             'average_rating': ''
         })
-
         return api
-
     api = jsonify({
         'title': book.title,
         'author': book.author,
@@ -202,9 +191,7 @@ def book_api(isbn):
         'review_count': review_count,
         'average_rating': avg_score
     })
-
     return api
-
 '''
 @app.route('/review', methods=['GET', 'POST'])
 def review():
