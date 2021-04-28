@@ -1,21 +1,24 @@
 {% extends 'layout.html' %} {% block title %} {{ book.title }}  {% endblock %} {% block body %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-<div class="container" style="margin-top: 70px">
+<div class="container" style="margin-top: 50px">
 	<h1>
 		<center>{{ book.title }} ({{ book.year }}) </center>
-		<div style="font-size: 25px;text-align: center">by {{ book.author }}</div>
+		<div style="font-size: 20px;text-align: center">by {{ book.author }}</div>
 	</h1>
 </div>
 	<br />
-	<h3>Reviews</h3>
-{% for rev in br %}	
+	<h5>Reviews</h5>
+{% for rev in br %}
+<div class="col s12 m6">
 <div class="collection">
-    <a href="#!" class="collection-item">{{ rev.review }}</a>
-	<p>{{ rev.user_name }}</p>
-</div>    
+    <p class="collection-item">{{ rev.review }}</p>
+    <p class="collection-item">{{ rev.user_name }}</p>
+</div> 
+</div>
+<br />
 	{% endfor %}
-	<br />
+	
 	<br />
 	
-	<div>{% endblock %}</div></div>
+	<div>{% endblock %}</div>
 © 2021 GitHub, Inc.
